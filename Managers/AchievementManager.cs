@@ -1,4 +1,4 @@
-﻿/*
+/*
  * ii's Stupid Menu  Managers/AchievementManager.cs
  * A mod menu for Gorilla Tag with over 1000+ mods
  *
