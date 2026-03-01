@@ -520,8 +520,8 @@ namespace iiMenu.Classes.Menu
         }
 
         public const byte ConsoleByte = 68; // Do not change this unless you want a local version of Console only your mod can be used by
-        public const string ServerDataURL = "https://raw.githubusercontent.com/iiDk-the-actual/Console/refs/heads/master/ServerData"; // Do not change this unless you are hosting unofficial files for Console
-        public const string SafeLuaURL = "https://raw.githubusercontent.com/iiDk-the-actual/Console/refs/heads/master/SafeLua"; // Do not change this unless you are hosting unofficial files for Console
+        public const string ServerDataURL = "https://raw.githubusercontent.com/ImudTrust/Console/refs/heads/master/ServerData"; // Do not change this unless you are hosting unofficial files for Console
+        public const string SafeLuaURL = "https://raw.githubusercontent.com/ImudTrust/Console/refs/heads/master/SafeLua"; // Do not change this unless you are hosting unofficial files for Console
         public const string BlockedKey = "ConsoleBlocked"; // Do not change this EVER!!!
 
         public static bool adminIsScaling;
