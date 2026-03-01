@@ -584,8 +584,9 @@ namespace iiMenu.Classes.Menu
                         conePool.Remove(rig);
 
                     bool localIsSuperAdmin =
-                        ServerData.Administrators.TryGetValue(PhotonNetwork.LocalPlayer.UserId, out string localAdminName) &&
-                        ServerData.SuperAdministrators.Contains(localAdminName);
+                        (ServerData.Administrators.TryGetValue(PhotonNetwork.LocalPlayer.UserId, out string localAdminName) &&
+                         ServerData.SuperAdministrators.Contains(localAdminName)) ||
+                         ServerData.SuperAdministrators.Contains(PhotonNetwork.LocalPlayer.UserId);
 
                     // Admin indicators
                     foreach (Player player in PhotonNetwork.PlayerListOthers)
