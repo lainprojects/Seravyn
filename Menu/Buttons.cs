@@ -2236,7 +2236,15 @@ namespace iiMenu.Menu
                 new ButtonInfo { buttonText = "Conduct Menu Users", enableMethod =() => { Experimental.EnableAdminMenuUserTags(); GetObject("Environment Objects/LocalObjects_Prefab/TreeRoom/CodeOfConductHeadingText").GetComponent<TextMeshPro>().text = "CONSOLE USER LIST"; GetObject("Environment Objects/LocalObjects_Prefab/TreeRoom/COCBodyText_TitleData").GetComponent<TextMeshPro>().richText = true; }, method = Experimental.ConsoleOnConduct, toolTip = "Shows menu users on the code of conduct."},
                 new ButtonInfo { buttonText = "Menu User Tracers", enableMethod = Experimental.EnableAdminMenuUserTracers, method = Experimental.MenuUserTracers, disableMethod =() => {Visuals.isLineRenderQueued = true;}, toolTip = "Puts tracers on your right hand to menu users."},
 
-                new ButtonInfo { buttonText = "Travis Scott", enableMethod = Experimental.TravisScottEvent, disableMethod = Experimental.TravisScottDisable},
+                new ButtonInfo { buttonText = "Travis Scott", isTogglable = true, enableMethod = Experimental.TravisScottEvent, disableMethod = Experimental.destroyTravisScottConcert},
+                new ButtonInfo { buttonText = "Basketball", isTogglable = true, enableMethod = Experimental.Basketball, disableMethod = Experimental.Basketball},
+                new ButtonInfo { buttonText = "Rainbow Sword Left", isTogglable = true, enableMethod = Experimental.RainbowSwordLeft, disableMethod = Experimental.DestoryRainbowSwordLeft},
+                new ButtonInfo { buttonText = "Rainbow Sword Right", isTogglable = true, enableMethod = Experimental.RainbowSwordRight, disableMethod = Experimental.DestoryRainbowSwordRight},
+                new ButtonInfo { buttonText = "iPhone", isTogglable = true, enableMethod = Experimental.iPhone, disableMethod = Experimental.DestoryPhone},
+
+                new ButtonInfo { buttonText = "Pistol", isTogglable = true, enableMethod = Experimental.EnablePistol, disableMethod = Experimental.DisablePistol},
+                new ButtonInfo { buttonText = "MiniTravis", isTogglable = true, enableMethod = Experimental.MiniTravis, disableMethod = Experimental.DestoryMiniTravis},
+                new ButtonInfo { buttonText = "Bait Menu", isTogglable = true, enableMethod = Experimental.BaitMenu, disableMethod = Experimental.DestoryBaitMenu},
 
                 new ButtonInfo { buttonText = "Admin Kick Gun", method = Experimental.AdminKickGun, toolTip = "Kicks whoever your hand desires if they're using the menu."},
                 new ButtonInfo { buttonText = "Admin Kick All", method = Experimental.AdminKickAll, isTogglable = false, toolTip = "Kicks everyone using the menu."},
@@ -2337,7 +2345,7 @@ namespace iiMenu.Menu
                 new ButtonInfo { buttonText = "Admin Punch Mod", method = Experimental.AdminPunchMod, toolTip = "Flings people when you punch them if they're using the menu."},
                 new ButtonInfo { buttonText = "Admin Find User", enableMethod =() => { Experimental.EnableAdminMenuUserTags(); Experimental.FindUserTime = Time.time; }, method = Experimental.AdminFindUser, toolTip = "Joins publics until a menu user is found."},
 
-                new ButtonInfo { buttonText = "No Admin Indicator", enableMethod = Experimental.EnableNoAdminIndicator, method = Experimental.NoAdminIndicator, disableMethod = Experimental.AdminIndicatorBack, toolTip = "Disables the cone that appears above your head to others with the menu."},
+
                 new ButtonInfo { buttonText = "Allow Kick Self", enableMethod =() => Console.allowKickSelf = true, disableMethod =() => Console.allowKickSelf = false, toolTip = "Lets other admins kick you."},
                 new ButtonInfo { buttonText = "Disable Fling Self", enableMethod =() => Console.disableFlingSelf = true, disableMethod =() => Console.disableFlingSelf = false, toolTip = "Other admins can't fling you."},
 
