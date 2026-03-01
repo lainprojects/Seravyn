@@ -45,7 +45,7 @@ namespace iiMenu
         private void Awake()
         {
             // Set console title
-            Console.Title = $"ii's Stupid Menu // Build {PluginInfo.Version}";
+            Console.Title = $"Seravyn // Build {PluginInfo.Version}";
             instance = this;
 
             string logoLines = PluginInfo.Logo.Split(@"
@@ -54,7 +54,7 @@ namespace iiMenu
 
             LogManager.Log($@"
 {logoLines}
-    ii's Stupid Menu  {(PluginInfo.BetaBuild ? "Beta " : "Build")} {PluginInfo.Version}
+    Seravyn  {("Developer Build")} {PluginInfo.Version}
     Compiled {PluginInfo.BuildTimestamp}
     
     This program comes with ABSOLUTELY NO WARRANTY;
@@ -90,13 +90,13 @@ namespace iiMenu
             PatchHandler.PatchAll(true);
 
             // Ugily hard-coded but works so well
-            if (File.Exists($"{PluginInfo.BaseDirectory}/iiMenu_Preferences.txt"))
+            if (File.Exists($"{PluginInfo.BaseDirectory}/Seravyn_Preferences.txt"))
             {
-                if (File.ReadAllLines($"{PluginInfo.BaseDirectory}/iiMenu_Preferences.txt")[0].Split(";;").Contains("Accept TOS"))
+                if (File.ReadAllLines($"{PluginInfo.BaseDirectory}/Seravyn_Preferences.txt")[0].Split(";;").Contains("Accept TOS"))
                     TOSPatches.enabled = true;
             }
 
-            if (File.Exists($"{PluginInfo.BaseDirectory}/iiMenu_DisableTelemetry.txt"))
+            if (File.Exists($"{PluginInfo.BaseDirectory}/Seravyn_DisableTelemetry.txt"))
                 ServerData.DisableTelemetry = true;
             
             GorillaTagger.OnPlayerSpawned(LoadMenu);
