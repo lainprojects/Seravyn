@@ -1,4 +1,4 @@
-﻿/*
+/*
  * ii's Stupid Menu  PluginInfo.cs
  * A mod menu for Gorilla Tag with over 1000+ mods
  *
@@ -19,30 +19,34 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+using PlayFab.ProfilesModels;
+
 namespace iiMenu
 {
     public class PluginInfo
     {
-        public const string GUID = "org.iidk.gorillatag.iimenu";
-        public const string Name = "ii's Stupid Menu";
-        public const string Description = "Created by @crimsoncauldron with love <3";
-        public const string BuildTimestamp = "2026-02-23T03:36:03Z";
-        public const string Version = "8.3.0";
+        public const string GUID = "org.speech.gorillatag.Seravyn";
+        public const string Name = "Seravyn Menu";
+        public const string Description = "Created by @superiorspeech with love <3";
+        public const string BuildTimestamp = "2026-03-1";
+        public const string Version = "1.0.0";
 
-        public const string BaseDirectory = "iisStupidMenu";
-        public const string ClientResourcePath = "iiMenu.Resources.Client";
+        public const string BaseDirectory = "Seravyn";
+        public const string ClientResourcePath = "Seravyn.Resources.Client";
         public const string ServerResourcePath = "https://raw.githubusercontent.com/iiDk-the-actual/iis.Stupid.Menu/master/Resources/Server";
-        public const string ServerAPI = "https://iidk.online"; // Server now closed source due to bad actors :( For any questions, please make an issue on the GitHub repository.
+        public const string ServerAPI = "https://iidk.online";
         
-        public const string Logo = @"••╹   ┏┓     • ┓  ┳┳┓      
-┓┓ ┏  ┗┓╋┓┏┏┓┓┏┫  ┃┃┃┏┓┏┓┓┏
-┗┗ ┛  ┗┛┗┗┻┣┛┗┗┻  ┛ ┗┗ ┛┗┗┻
-           ┛";
+        public const string Logo = @"   _____ ______ _____       __      ____     ___   _ 
+  / ____|  ____|  __ \     /\ \    / /\ \   / / \ | |
+ | (___ | |__  | |__) |   /  \ \  / /  \ \_/ /|  \| |
+  \___ \|  __| |  _  /   / /\ \ \/ /    \   / | . ` |
+  ____) | |____| | \ \  / ____ \  /      | |  | |\  |
+ |_____/|______|_|  \_\/_/    \_\/       |_|  |_| \_|
+                                                     
+                                                     ";
 
-#if DEBUG
-        public static bool BetaBuild = true;
-#else
         public static bool BetaBuild = false;
-#endif
+        public static bool AdminBuild = false;
+        public static bool CommunityBuild = true;
     }
 }
