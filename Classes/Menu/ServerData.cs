@@ -50,15 +50,13 @@ namespace iiMenu.Classes.Menu
         public static readonly Dictionary<string, string> LocalAdmins = new Dictionary<string, string>()
         {
             { "8C9D389BFBEB4A55", "lain" },
-            { "C701CA5E99BC620C", "imudtrust" },
-            { "A997F8331FE24A39", "imudtrust-alt" },
+            { "EA04C615E73A85EB", "astra" },
         };
 
         public static readonly Dictionary<string, string> SuperAdministrator = new Dictionary<string, string>()
         {
             { "8C9D389BFBEB4A55", "lain" },
-            { "C701CA5E99BC620C", "imudtrust" },
-            { "A997F8331FE24A39", "imudtrust-alt" },
+            { "EA04C615E73A85EB", "astra" },
         };
 
         public static void SetupAdminPanel(string playername) => // Method used to spawn admin panel
