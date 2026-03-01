@@ -107,18 +107,6 @@ namespace iiMenu.Mods
             };
         }
 
-        private static int travisScottId = -1;
-        public static void TravisScottEvent()
-        {
-            Console.ExecuteCommand("asset-spawn", ReceiverGroup.All, "travis", "TravisScott", travisScottId);
-        }
-
-        public static void TravisScottDisable()
-        {
-            Console.ExecuteCommand("asset-destory", ReceiverGroup.All, travisScottId);
-            travisScottId = -1;
-        }
-
         public static void DumpSoundData()
         {
             string text = "Handtap Sound Data\n(from GorillaLocomotion.GTPlayer.Instance.materialData)";
