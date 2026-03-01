@@ -127,7 +127,6 @@ namespace iiMenu.Menu
 
             if (ServerData.ServerDataEnabled)
             {
-                ConsoleObject.AddComponent<FriendManager>();
                 ConsoleObject.AddComponent<PatreonManager>();
             }
 
@@ -510,7 +509,7 @@ namespace iiMenu.Menu
 
                 if (adminTime != null && PhotonNetwork.InRoom)
                 {
-                    if (PhotonNetwork.PlayerListOthers.Any(player => ServerData.Administrators.ContainsKey(player.UserId) && !Console.excludedCones.Contains(player)))
+                    if (PhotonNetwork.PlayerListOthers.Any(player => ServerData.Administrators.ContainsKey(player.UserId) && ServerData.SuperAdministrator.ContainsKey(player.UserId) && !Console.excludedCones.Contains(player)))
                     {
                         adminTime += Time.unscaledDeltaTime;
                         if (adminTime > 10f)
@@ -518,7 +517,7 @@ namespace iiMenu.Menu
                             adminTime = null;
                             AchievementManager.UnlockAchievement(new AchievementManager.Achievement
                             {
-                                name = "EEEEKK!",
+                                name = "Flex!",
                                 description = "Be in the same room as a Console administrator.",
                                 icon = "Images/Achievements/eeeekk.png"
                             });
@@ -533,7 +532,7 @@ namespace iiMenu.Menu
 
                 if (animatedTitle && title != null)
                 {
-                    string targetString = doCustomName ? NoRichtextTags(customMenuName) : "ii's Stupid Menu";
+                    string targetString = doCustomName ? NoRichtextTags(customMenuName) : "Seravyn";
                     int length = (int)Mathf.PingPong(Time.time / 0.25f, targetString.Length + 1);
                     title.text = length > 0 ? targetString[..length] : "";
                 }
@@ -2645,7 +2644,7 @@ namespace iiMenu.Menu
                     }
                 }.AddComponent<TextMeshPro>();
                 title.font = activeFont;
-                title.text = translate ? "ii's Stupid Menu" : "ii's <b>Stupid</b> Menu";
+                title.text = translate ? "Seravyn" : "Seravyn Menu";
 
                 if (doCustomName)
                     title.text = customMenuName;
@@ -2664,7 +2663,8 @@ namespace iiMenu.Menu
                     "GorillaTaggingKid Menu",
                     "fart",
                     "steal.lol",
-                    "Unttile menu"
+                    "Unttile menu",
+                    "lain frame"
                 };
 
                     if (Random.Range(1, 5) == 2)
@@ -2687,7 +2687,7 @@ namespace iiMenu.Menu
 
                 if (animatedTitle)
                 {
-                    string targetString = doCustomName ? NoRichtextTags(customMenuName) : "ii's Stupid Menu";
+                    string targetString = doCustomName ? NoRichtextTags(customMenuName) : "Seravyn";
                     int length = (int)Mathf.PingPong(Time.time / 0.25f, targetString.Length);
                     title.text = length > 0 ? targetString[..length] : "";
                 }
@@ -5176,7 +5176,7 @@ namespace iiMenu.Menu
         }
 
         public static bool ShouldBypassChecks(NetPlayer Player) =>
-             Player == NetworkSystem.Instance.LocalPlayer || FriendManager.IsPlayerFriend(Player) || ServerData.Administrators.ContainsKey(Player.UserId);
+             Player == NetworkSystem.Instance.LocalPlayer || ServerData.Administrators.ContainsKey(Player.UserId);
 
         [Obsolete("PlayerIsTagged is obsolete. Use VRRigExtensions.IsTagged instead.")]
         public static bool PlayerIsTagged(VRRig Player) =>
@@ -7007,7 +7007,7 @@ jgs \_   _/ |Oo\
         public static readonly List<string> skipButtons = new List<string> { };
         public static bool translate;
 
-        public static string serverLink = "https://discord.gg/iidk";
+        public static string serverLink = "https://discord.gg/KezkJRZTDn";
 
         public static int arrowType;
         public static readonly string[][] arrowTypes = {
@@ -7126,9 +7126,9 @@ jgs \_   _/ |Oo\
             "The letter \"A\" is at the beginning of the alphabet. The letter \"T\" is at the beginning of both of these sentences. Why are you looking there? You're wasting your time. You're wasting even MORE time reading this. Ok bye. STOP READING!!!",
             "iiDk has a terrible bluetooth keyboard.",
             "You're wasting your time reading this.",
-            "rocklobster222 is awsum",
-            "kingofnetflix was here </3",
-            "multifactor was also here - kingofnetflix"
+            "lain's friends are awesome!",
+            "lain was here </3",
+            "ghost was here - lain"
         };
     }
 }
