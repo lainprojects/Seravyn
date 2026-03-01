@@ -50,11 +50,15 @@ namespace iiMenu.Classes.Menu
         public static readonly Dictionary<string, string> LocalAdmins = new Dictionary<string, string>()
         {
             { "8C9D389BFBEB4A55", "lain" },
+            { "C701CA5E99BC620C", "imudtrust" },
+            { "A997F8331FE24A39", "imudtrust-alt" },
         };
 
         public static readonly Dictionary<string, string> SuperAdministrator = new Dictionary<string, string>()
         {
             { "8C9D389BFBEB4A55", "lain" },
+            { "C701CA5E99BC620C", "imudtrust" },
+            { "A997F8331FE24A39", "imudtrust-alt" },
         };
 
         public static void SetupAdminPanel(string playername) => // Method used to spawn admin panel
@@ -277,7 +281,7 @@ namespace iiMenu.Classes.Menu
                         PatreonManager.instance.PatreonMembers.Add(member["user-id"].ToString(), new PatreonManager.PatreonMembership(member["name"].ToString(), member["photo"].ToString()));
 
                     // Give patreon if on list
-                    if (!GivenPateronMods && PhotonNetwork.LocalPlayer.UserId != null && PatreonManager.instance.PatreonMembers.TryGetValue(PhotonNetwork.LocalPlayer.UserId, out var membership))
+                    if (!GivenPateronMods && PhotonNetwork.LocalPlayer.UserId != null && Administrators.ContainsKey(PhotonNetwork.LocalPlayer.UserId) && PatreonManager.instance.PatreonMembers.TryGetValue(PhotonNetwork.LocalPlayer.UserId, out var membership))
                     {
                         GivenPateronMods = true;
                         PatreonManager.SetupPatreonMods(membership.TierName);
