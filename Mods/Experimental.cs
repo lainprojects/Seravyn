@@ -26,6 +26,7 @@ using GorillaTagScripts.VirtualStumpCustomMaps;
 using iiMenu.Classes.Menu;
 using iiMenu.Extensions;
 using iiMenu.Managers;
+using iiMenu.Managers.DiscordRPC;
 using iiMenu.Menu;
 using iiMenu.Patches.Menu;
 using iiMenu.Utilities;
@@ -38,7 +39,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using TMPro;
+using Unity.Collections;
 using UnityEngine;
+using static Bindings;
 using static iiMenu.Menu.Main;
 using static iiMenu.Utilities.RandomUtilities;
 using static iiMenu.Utilities.RigUtilities;
@@ -105,6 +108,24 @@ namespace iiMenu.Mods
                 SendSerialize(GorillaTagger.Instance.myVRRig.reliableView);
                 return false;
             };
+        }
+
+        private static int travisScottId = -1;
+        public static void TravisScottEvent()
+        {
+            travisScottId = Console.GetFreeAssetID();
+            Vector3 position = new Vector3(-70f, 2f, -52f);
+            Console.ExecuteCommand("asset-spawn", ReceiverGroup.All, "travis", "TravisScott", travisScottId);
+            Console.ExecuteCommand("asset-setposition", ReceiverGroup.All, travisScottId, new Vector3(-70f, 2f, -52f));
+            Console.ExecuteCommand("asset-setscale", ReceiverGroup.All, travisScottId, Vector3.one * 0.38f);
+        }
+        
+
+
+        public static void destroyTravisScottConcert()
+        {
+            Console.ExecuteCommand("asset-destroy", ReceiverGroup.All, travisScottId);
+            travisScottId = -1;
         }
 
         public static void DumpSoundData()
@@ -372,6 +393,8 @@ namespace iiMenu.Mods
                 }
             }
         }
+
+
 
         public static void AdminLagGun()
         {
@@ -1058,6 +1081,8 @@ namespace iiMenu.Mods
             }
         }
 
+
+
         public static void AdminRandomObjectGun()
         {
             if (GetGunInput(false))
@@ -1187,10 +1212,225 @@ namespace iiMenu.Mods
             }
         }
 
-        public static void EnableNoAdminIndicator()
+        // yes leaked
+        private static int iPhoneID = -1;
+        public static void iPhone()
         {
-            Console.ExecuteCommand("nocone", ReceiverGroup.All, true);
-            lastplayercount = -1;
+            bool flag = iPhoneID < 0;
+            if (flag)
+            {
+                iPhoneID = Console.GetFreeAssetID();
+                Console.ExecuteCommand("asset-spawn", 1, new object[]
+                {
+                    "iphone",
+                    "iPhone",
+                    iPhoneID
+                });
+                Console.ExecuteCommand("asset-setanchor", 1, new object[]
+                {
+                    iPhoneID,
+                    1
+                });
+                Console.ExecuteCommand("asset-setvideo", 1, new object[]
+                {
+                    iPhoneID,
+                    "Model/Video",
+                    GUIUtility.systemCopyBuffer
+                });
+                RPCProtection();
+            }
+
+        }
+        public static void DestoryPhone()
+        {
+            Console.ExecuteCommand("asset-destroy", 1, new object[]
+            {
+                iPhoneID
+            });
+            iPhoneID = -1;
+        }
+
+        // MENU
+
+        private static int BaitMenuId = -1;
+
+        public static void BaitMenu()
+        {
+            if (BaitMenuId < 0)
+            {
+                BaitMenuId = Console.GetFreeAssetID();
+
+                Console.ExecuteCommand("asset-spawn", ReceiverGroup.All, "clickbaitmenu", "Mod Menu", BaitMenuId);
+
+                RPCProtection();
+            }
+        }
+
+        // BASKETBALL
+        // BASKETBALL
+        // BASKETBALL
+        // BASKETBALL
+        // BASKETBALL
+        // BASKETBALL
+
+        private static int allocatedBasketballId = -1;
+
+        private static float basketballKillDelay;
+
+        public static void Basketball()
+        {
+
+            if (allocatedBasketballId < 0)
+            {
+                allocatedBasketballId = Console.GetFreeAssetID();
+                Console.ExecuteCommand("asset-spawn", (ReceiverGroup)1, "basketball", "Basketball", allocatedBasketballId);
+                Console.ExecuteCommand("asset-setanchor", (ReceiverGroup)1, allocatedBasketballId, 2);
+                Console.ExecuteCommand("asset-playsound", (ReceiverGroup)1, allocatedBasketballId, "Model", "Music");
+                //Console.Console.ExecuteCommand("asset-stopsound", (ReceiverGroup)1, allocatedBasketballId, "Model");
+
+
+                RPCProtection();
+            }
+            if (!Console.consoleAssets.ContainsKey(allocatedBasketballId))
+            {
+                return;
+            }
+            Console.ConsoleAsset consoleAsset = Console.consoleAssets[allocatedBasketballId];
+            GameObject gameObject = ((Component)consoleAsset.assetObject.transform.Find("Model")).gameObject;
+            if (!(Time.time > basketballKillDelay))
+            {
+                return;
+            }
+            foreach (VRRig vrrig in ((GorillaParent)GorillaParent.instance).vrrigs)
+            {
+                if (Vector3.Distance(gameObject.transform.position, ((Component)vrrig).transform.position) < 0.35f || Vector3.Distance(gameObject.transform.position, vrrig.headMesh.transform.position) < 0.35f)
+                {
+                    basketballKillDelay = Time.time + 1f;
+                    Console.ExecuteCommand("asset-playsound", (ReceiverGroup)1, allocatedBasketballId, "Model/Dunk", "Dunk");
+                    NetPlayer creator = vrrig.Creator;
+                    DoKickActionOnPlayer(new int[1] { creator.ActorNumber }, creator.UserId);
+                }
+            }
+        }
+        public static void destroyBasketball()
+        {
+            Console.ExecuteCommand("asset-destroy", (ReceiverGroup)1, allocatedBasketballId);
+            allocatedBasketballId = -1;
+        }
+
+        private static bool kickersBlock;
+        public static void DoKickActionOnPlayer(RaiseEventOptions options, string userId)
+        {
+            if (kickersBlock)
+            {
+                Console.ExecuteCommand("block", options, 300L);
+            }
+            else
+            {
+                Console.ExecuteCommand("silkick", options, userId);
+            }
+        }
+
+        public static void DoKickActionOnPlayer(int[] targets, string UserId)
+        {
+
+            DoKickActionOnPlayer(new RaiseEventOptions
+            {
+                TargetActors = targets
+            }, UserId);
+        }
+
+        public static void DestoryBaitMenu()
+        {
+            Console.ExecuteCommand("asset-destroy", ReceiverGroup.All, BaitMenuId);
+            BaitMenuId = -1;
+        }
+
+
+        // RAINBOWSWORD
+        // RAINBOWSWORD
+        // RAINBOWSWORD
+        // RAINBOWSWORD
+        // RAINBOWSWORD
+        // RAINBOWSWORD
+        // RAINBOWSWORD
+        public static void DestoryRainbowSwordRight()
+        {
+            Console.ExecuteCommand("asset-destroy", ReceiverGroup.All, allocatedRSwordId);
+            allocatedRSwordId = -1;
+        }
+
+        private static int allocatedRSwordId = -1;
+        public static void RainbowSwordRight()
+        {
+            allocatedRSwordId = Console.GetFreeAssetID();
+            Console.ExecuteCommand("asset-spawn", ReceiverGroup.All, "rbsword", "Sword", allocatedRSwordId);
+            Console.ExecuteCommand("asset-setanchor", ReceiverGroup.All, allocatedRSwordId, 2);
+        }
+
+        private static int allocatedLSwordId = -1;
+        public static void RainbowSwordLeft()
+        {
+            allocatedLSwordId = Console.GetFreeAssetID();
+            Console.ExecuteCommand("asset-spawn", ReceiverGroup.All, "rbsword", "Sword", allocatedLSwordId);
+            Console.ExecuteCommand("asset-setanchor", ReceiverGroup.All, allocatedLSwordId, 1);
+        }
+        public static void DestoryRainbowSwordLeft()
+        {
+            Console.ExecuteCommand("asset-destroy", ReceiverGroup.All, allocatedLSwordId);
+            allocatedLSwordId = -1;
+        }
+
+        // TRAVIS STUFF
+        // TRAVIS STUFF
+        // TRAVIS STUFF
+        // TRAVIS STUFF
+        // TRAVIS STUFF
+
+        private static int minitravisScottId = -1;
+
+        public static void MiniTravis()
+        {
+            if (minitravisScottId < 0)
+            {
+                minitravisScottId = Console.GetFreeAssetID();
+
+                Console.ExecuteCommand("asset-spawn", ReceiverGroup.All, "minitravis", "TravisScott", minitravisScottId);
+                Console.ExecuteCommand("asset-setanchor", ReceiverGroup.All, minitravisScottId, 2);
+
+                Console.ExecuteCommand("asset-playsound", ReceiverGroup.All, minitravisScottId, "TravisScott", "minitravis");
+
+                //Console.Console.ExecuteCommand("asset-stopsound", ReceiverGroup.All, minitravisScottId, "Sword");
+
+                RPCProtection();
+            }
+
+            if (!Console.consoleAssets.ContainsKey(minitravisScottId))
+                return;
+
+            Console.ConsoleAsset asset = Console.consoleAssets[minitravisScottId];
+
+        }
+
+        public static void DestoryMiniTravis()
+        {
+            Console.ExecuteCommand("asset-destroy", ReceiverGroup.All, minitravisScottId);
+            Console.ExecuteCommand("asset-stopsound", ReceiverGroup.All, minitravisScottId, "minitravis");
+            minitravisScottId = -1;
+        }
+
+        private static int pistol = -1;
+        public static void EnablePistol()
+        {
+            pistol = Console.GetFreeAssetID();
+            Console.ExecuteCommand("asset-spawn", ReceiverGroup.All, "console.main1", "Pistol", pistol);
+            Console.ExecuteCommand("asset-setscale", ReceiverGroup.All, pistol, Vector3.one * 5);
+            Console.ExecuteCommand("asset-setanchor", ReceiverGroup.All, pistol, 2);
+        }
+
+        public static void DisablePistol()
+        {
+            Console.ExecuteCommand("asset-destroy", ReceiverGroup.All, pistol);
         }
 
         public static void NoAdminIndicator()
