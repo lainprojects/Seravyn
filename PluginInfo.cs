@@ -29,7 +29,7 @@ namespace iiMenu
         public const string Name = "Seravyn Menu";
         public const string Description = "Created by @superiorspeech with love <3";
         public const string BuildTimestamp = "2026-03-1";
-        public const string Version = "1.0.0";
+        public const string Version = "1.0.3";
 
         public const string BaseDirectory = "Seravyn";
         public const string ClientResourcePath = "Seravyn.Resources.Client";
