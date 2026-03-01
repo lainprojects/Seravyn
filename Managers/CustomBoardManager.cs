@@ -1,4 +1,4 @@
-﻿/*
+/*
  * ii's Stupid Menu  Managers/CustomBoardManager.cs
  * A mod menu for Gorilla Tag with over 1000+ mods
  *
@@ -170,10 +170,10 @@ namespace iiMenu.Managers
         public const int StumpLeaderboardIndex = 3;
         public const int ForestLeaderboardIndex = 2;
 
-        public static string motdTemplate = "You are using build {0}. This menu was created by iiDk (@crimsoncauldron) on Discord. " +
+        public static string motdTemplate = "You are using build {0}. This menu was originally created by iiDk (@crimsoncauldron) on Discord, but was forked by Lain (@superiorspeech) on Discord. " +
         "This menu is completely free and open sourced, if you paid for this menu you have been scammed. " +
         "There are a total of <b>{1}</b> mods on this menu. " +
-        "<color=red>I, iiDk, am not responsible for any bans using this menu.</color> " +
+        "<color=red>I, Lain, am not responsible for any bans using this menu.</color> " +
         "If you get banned while using this, it's your responsibility.\n\nCurrent menu status: <b>Loading...</b>\nMade with <3 by iiDk, kingofnetflix, and others\n\n<alpha=128>{2} {0} {3}<alpha=255>";
 
         public Material forestMaterial;
