@@ -54,7 +54,7 @@ namespace iiMenu
 
             LogManager.Log($@"
 {logoLines}
-    Seravyn  {("Developer Build")} {PluginInfo.Version}
+    Seravyn {PluginInfo.Version}
     Compiled {PluginInfo.BuildTimestamp}
     
     This program comes with ABSOLUTELY NO WARRANTY;
