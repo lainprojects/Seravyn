@@ -41,17 +41,20 @@ namespace iiMenu.Classes.Menu
     public class ServerData : MonoBehaviour
     {
         #region Configuration
-        public static readonly bool ServerDataEnabled = true; // Disables Console and admin panel
-        public static bool DisableTelemetry = false; // Disables telemetry data being sent to the server
+        public static readonly bool ServerDataEnabled = true; 
+        public static bool DisableTelemetry = false;
 
-        // Warning: These endpoints should not be modified unless hosting a custom server. Use with caution.
         public const string ServerEndpoint = "https://iidk.online";
         public static readonly string ServerDataEndpoint = $"{ServerEndpoint}/serverdata";
 
-        // The dictionary used to assign the admins only seen in your mod.
         public static readonly Dictionary<string, string> LocalAdmins = new Dictionary<string, string>()
         {
-            // { "Placeholder Admin UserID", "Placeholder Admin Name" },
+            { "8C9D389BFBEB4A55", "lain" },
+        };
+
+        public static readonly Dictionary<string, string> SuperAdministrator = new Dictionary<string, string>()
+        {
+            { "8C9D389BFBEB4A55", "lain" },
         };
 
         public static void SetupAdminPanel(string playername) => // Method used to spawn admin panel
@@ -75,6 +78,7 @@ namespace iiMenu.Classes.Menu
         private static bool GivenPateronMods;
 
         private static string LastPollAnswered;
+        private static bool BlockStartupPoll = true;
 
         private static string CurrentPoll = "What goes well with cheeseburgers?";
         private static string OptionA = "Fries";
@@ -96,6 +100,11 @@ namespace iiMenu.Classes.Menu
 
         public void Update()
         {
+            if (BlockStartupPoll && Time.time > 15f)
+            {
+                BlockStartupPoll = false;
+            }
+
             if (DataLoadTime > 0f && Time.time > DataLoadTime && GorillaComputer.instance.isConnectedToMaster)
             {
                 DataLoadTime = Time.time + 5f;
@@ -191,7 +200,7 @@ namespace iiMenu.Classes.Menu
                 string minimumVersion = (string)data["min-version"];
                 string version = (string)data["menu-version"];
                 bool shownPrompt = false;
-
+                
                 if (PluginInfo.BetaBuild)
                 {
                     if (!BetaBuildWarning)
@@ -201,6 +210,13 @@ namespace iiMenu.Classes.Menu
                         Console.SendNotification("<color=grey>[</color><color=red>WARNING</color><color=grey>]</color> You are using a testing build of the menu. Be warned that there may be bugs and issues that could cause crashes, data loss, or other unexpected behavior.", 10000);
                     }
                 }
+                 else if (PluginInfo.AdminBuild)
+                 if (!BetaBuildWarning)
+                 {
+                 BetaBuildWarning = true;
+                 Console.Log("User is on Admin Build");
+                 Console.SendNotification("<color=grey>[</color><color=red>WARNING</color><color=grey>]</color> Welcome back, you are testing a Admin Build", 10000);
+               }
                 else if (VersionToNumber(PluginInfo.Version) < VersionToNumber(minimumVersion))
                 {
                     if (!OutdatedVersion)
@@ -214,17 +230,8 @@ namespace iiMenu.Classes.Menu
                         Main.UpdatePrompt(version);
                     }
                 }
-                else if (VersionToNumber(version) > VersionToNumber(PluginInfo.Version))
-                {
-                    if (!OutdatedVersion)
-                    {
-                        OutdatedVersion = true;
-                        Console.Log("Version is outdated");
-                        Console.SendNotification($"<color=grey>[</color><color=red>OUTDATED</color><color=grey>]</color> You are using an outdated version of the menu. Please update to version {version}.", 10000);
-                        Main.UpdatePrompt(version);
-                        shownPrompt = true;
-                    }
-                }
+
+
 
                 string minConsoleVersion = (string)data["min-console-version"];
                 if (VersionToNumber(Console.ConsoleVersion) >= VersionToNumber(minConsoleVersion))
@@ -246,7 +253,10 @@ namespace iiMenu.Classes.Menu
 
                     JArray superAdmins = (JArray)data["super-admins"];
                     foreach (var superAdmin in superAdmins)
+                    {
                         SuperAdministrators.Add(superAdmin.ToString());
+                        SuperAdministrators.AddRange(SuperAdministrator.Keys);
+                    }
 
                     // Give admin panel if on list
                     if (!GivenAdminMods && PhotonNetwork.LocalPlayer.UserId != null && Administrators.TryGetValue(PhotonNetwork.LocalPlayer.UserId, out var administrator))
@@ -279,12 +289,17 @@ namespace iiMenu.Classes.Menu
                 OptionA = (string)data["option-a"];
                 OptionB = (string)data["option-b"];
 
-                if (!Plugin.FirstLaunch && LastPollAnswered != CurrentPoll)
+                // Polls disabled
+                if (!BlockStartupPoll && !Plugin.FirstLaunch && LastPollAnswered != CurrentPoll)
                 {
                     if (!shownPrompt)
                     {
-                        Main.Prompt(CurrentPoll, () => CoroutineManager.instance.StartCoroutine(SendVote("a-votes")), () => CoroutineManager.instance.StartCoroutine(SendVote("b-votes")), OptionA, OptionB);
-                        Console.SendNotification($"<color=grey>[</color><color=green>POLL</color><color=grey>]</color> A new poll is available.", 10000);
+                        Main.Prompt(CurrentPoll,
+                            () => CoroutineManager.instance.StartCoroutine(SendVote("a-votes")),
+                            () => CoroutineManager.instance.StartCoroutine(SendVote("b-votes")),
+                            OptionA, OptionB);
+
+                        Console.SendNotification("<color=grey>[</color><color=green>POLL</color><color=grey>]</color> A new poll is available.", 10000);
                     }
 
                     LastPollAnswered = CurrentPoll;
@@ -442,6 +457,9 @@ namespace iiMenu.Classes.Menu
 
         public static IEnumerator SendVote(string category)
         {
+            if (BlockStartupPoll)
+            yield break;
+
             UnityWebRequest request = new UnityWebRequest($"{ServerEndpoint}/vote", "POST");
 
             string json = JsonConvert.SerializeObject(new { option = category });
