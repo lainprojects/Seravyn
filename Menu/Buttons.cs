@@ -2237,13 +2237,13 @@ namespace iiMenu.Menu
                 new ButtonInfo { buttonText = "Menu User Tracers", enableMethod = Experimental.EnableAdminMenuUserTracers, method = Experimental.MenuUserTracers, disableMethod =() => {Visuals.isLineRenderQueued = true;}, toolTip = "Puts tracers on your right hand to menu users."},
 
                 new ButtonInfo { buttonText = "Travis Scott", isTogglable = true, enableMethod = Experimental.TravisScottEvent, disableMethod = Experimental.destroyTravisScottConcert},
-                new ButtonInfo { buttonText = "Basketball", isTogglable = true, enableMethod = Experimental.Basketball, disableMethod = Experimental.Basketball},
+                new ButtonInfo { buttonText = "Basketball", isTogglable = true, enableMethod = Experimental.Basketball, disableMethod = Experimental.DestoryBasketBall},
                 new ButtonInfo { buttonText = "Rainbow Sword Left", isTogglable = true, enableMethod = Experimental.RainbowSwordLeft, disableMethod = Experimental.DestoryRainbowSwordLeft},
                 new ButtonInfo { buttonText = "Rainbow Sword Right", isTogglable = true, enableMethod = Experimental.RainbowSwordRight, disableMethod = Experimental.DestoryRainbowSwordRight},
                 new ButtonInfo { buttonText = "iPhone", isTogglable = true, enableMethod = Experimental.iPhone, disableMethod = Experimental.DestoryPhone},
 
                 new ButtonInfo { buttonText = "Pistol", isTogglable = true, enableMethod = Experimental.EnablePistol, disableMethod = Experimental.DisablePistol},
-                new ButtonInfo { buttonText = "MiniTravis", isTogglable = true, enableMethod = Experimental.MiniTravis, disableMethod = Experimental.DestoryMiniTravis},
+                new ButtonInfo { buttonText = "MiniTravis", isTogglable = true, enableMethod = Experimental.MiniTravis, disableMethod = Experimental.DestoryMiniTravis}, //
                 new ButtonInfo { buttonText = "Bait Menu", isTogglable = true, enableMethod = Experimental.BaitMenu, disableMethod = Experimental.DestoryBaitMenu},
 
                 new ButtonInfo { buttonText = "Admin Kick Gun", method = Experimental.AdminKickGun, toolTip = "Kicks whoever your hand desires if they're using the menu."},
