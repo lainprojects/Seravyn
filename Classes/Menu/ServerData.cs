@@ -41,22 +41,20 @@ namespace iiMenu.Classes.Menu
     public class ServerData : MonoBehaviour
     {
         #region Configuration
-        public static readonly bool ServerDataEnabled = true; 
-        public static bool DisableTelemetry = false;
+        public static readonly bool ServerDataEnabled = true;
+        public static bool DisableTelemetry = false;    
 
-        public const string ServerEndpoint = "https://iidk.online";
-        public static readonly string ServerDataEndpoint = $"{ServerEndpoint}/serverdata";
+        public const string ServerEndpoint = "https://seravynonline.vercel.app/";
+        public static readonly string ServerDataEndpoint = $"{ServerEndpoint}/serverdata";  
 
         public static readonly Dictionary<string, string> LocalAdmins = new Dictionary<string, string>()
         {
-            { "8C9D389BFBEB4A55", "lain" },
-            { "EA04C615E73A85EB", "astra" },
+            // Seravyn doesnt use this, it uses its own admin serverdata endpoint.
         };
 
         public static readonly Dictionary<string, string> SuperAdministrator = new Dictionary<string, string>()
         {
-            { "8C9D389BFBEB4A55", "lain" },
-            { "EA04C615E73A85EB", "astra" },
+            // Seravyn doesnt use this, it uses its own admin serverdata endpoint.
         };
 
         public static void SetupAdminPanel(string playername) => // Method used to spawn admin panel
@@ -198,11 +196,11 @@ namespace iiMenu.Classes.Menu
                 Main.serverLink = (string)data["discord-invite"];
                 CustomBoardManager.motdTemplate = (string)data["motd"];
 
-                // Version Check
+
                 string minimumVersion = (string)data["min-version"];
                 string version = (string)data["menu-version"];
                 bool shownPrompt = false;
-                
+
                 if (PluginInfo.BetaBuild)
                 {
                     if (!BetaBuildWarning)
@@ -212,64 +210,85 @@ namespace iiMenu.Classes.Menu
                         Console.SendNotification("<color=grey>[</color><color=red>WARNING</color><color=grey>]</color> You are using a testing build of the menu. Be warned that there may be bugs and issues that could cause crashes, data loss, or other unexpected behavior.", 10000);
                     }
                 }
-                 else if (PluginInfo.AdminBuild)
-                 if (!BetaBuildWarning)
-                 {
-                 BetaBuildWarning = true;
-                 Console.Log("User is on Admin Build");
-                 Console.SendNotification("<color=grey>[</color><color=red>WARNING</color><color=grey>]</color> Welcome back, you are testing a Admin Build", 10000);
-               }
-                else if (VersionToNumber(PluginInfo.Version) < VersionToNumber(minimumVersion))
-                {
-                    if (!OutdatedVersion)
+                else if (PluginInfo.AdminBuild)
+                    if (!BetaBuildWarning)
                     {
-                        OutdatedVersion = true;
-                        Console.Log("Version is severely outdated");
-                        GorillaComputer.instance.GeneralFailureMessage("Please update your menu. For safety purposes, you have been blocked from joining rooms.");
-                        if (NetworkSystem.Instance.InRoom)
-                            NetworkSystem.Instance.ReturnToSinglePlayer();
-                        Console.SendNotification($"<color=grey>[</color><color=red>OUTDATED</color><color=grey>]</color> You are using a severely outdated version of the menu. Please update your menu if available. For safety purposes, you have been blocked from joining rooms.", 10000);
-                        Main.UpdatePrompt(version);
+                        BetaBuildWarning = true;
+                        Console.Log("User is on Admin Build");
+                        Console.SendNotification("<color=grey>[</color><color=red>WARNING</color><color=grey>]</color> Welcome back, you are testing a Admin Build", 10000);
                     }
-                }
+                    else if (VersionToNumber(PluginInfo.Version) < VersionToNumber(minimumVersion))
+                    {
+                        if (!OutdatedVersion)
+                        {
+                            OutdatedVersion = true;
+                            Console.Log("Version is severely outdated");
+                            GorillaComputer.instance.GeneralFailureMessage("Please update your menu. For safety purposes, you have been blocked from joining rooms.");
+                            if (NetworkSystem.Instance.InRoom)
+                                NetworkSystem.Instance.ReturnToSinglePlayer();
+                            Console.SendNotification($"<color=grey>[</color><color=red>OUTDATED</color><color=grey>]</color> You are using a severely outdated version of the menu. Please update your menu if available. For safety purposes, you have been blocked from joining rooms.", 10000);
+                            Main.UpdatePrompt(version);
+                        }
+                    }
 
 
 
-                string minConsoleVersion = (string)data["min-console-version"];
+                string minConsoleVersion = data["min-console-version"]?.ToString() ?? "0.0.0";
+
                 if (VersionToNumber(Console.ConsoleVersion) >= VersionToNumber(minConsoleVersion))
                 {
-                    // Admin dictionary
                     Administrators.Clear();
+                    SuperAdministrators.Clear();
 
-                    JArray admins = (JArray)data["admins"];
-                    foreach (var admin in admins)
+                    if (data["admins"] is JArray admins)
                     {
-                        string name = admin["name"].ToString();
-                        string userId = admin["user-id"].ToString();
-                        Administrators[userId] = name;
+                        foreach (var admin in admins)
+                        {
+                            string name = admin["name"]?.ToString();
+                            string userId = admin["user-id"]?.ToString();
+
+                            if (!string.IsNullOrEmpty(userId))
+                                Administrators[userId] = name;
+                        }
                     }
 
                     Administrators.AddRange(LocalAdmins);
 
-                    SuperAdministrators.Clear();
-
-                    JArray superAdmins = (JArray)data["super-admins"];
-                    foreach (var superAdmin in superAdmins)
+                    if (data["super-admins"] is JArray superAdminNames)
                     {
-                        SuperAdministrators.Add(superAdmin.ToString());
-                        SuperAdministrators.AddRange(SuperAdministrator.Keys);
+                        foreach (var superNameToken in superAdminNames)
+                        {
+                            string superName = superNameToken?.ToString();
+                            if (string.IsNullOrEmpty(superName))
+                                continue;
+
+                            foreach (var pair in Administrators)
+                            {
+                                if (pair.Value.Equals(superName, StringComparison.OrdinalIgnoreCase))
+                                {
+                                    if (!SuperAdministrators.Contains(pair.Key))
+                                        SuperAdministrators.Add(pair.Key);
+                                    break;
+                                }
+                            }
+                        }
                     }
 
-                    // Give admin panel if on list
-                    if (!GivenAdminMods && PhotonNetwork.LocalPlayer.UserId != null && Administrators.TryGetValue(PhotonNetwork.LocalPlayer.UserId, out var administrator))
+                    if (!GivenAdminMods &&
+                        PhotonNetwork.LocalPlayer.UserId != null &&
+                        Administrators.TryGetValue(PhotonNetwork.LocalPlayer.UserId, out var administrator))
                     {
                         GivenAdminMods = true;
                         SetupAdminPanel(administrator);
                     }
-                } else
-                    Console.Log("On extreme outdated version of Console, not loading administrators");
+                }
+                else
+                {
+                    Console.Log("On extreme outdated version of Console, not loading administrators.");
+                    NotificationManager.SendNotification("[Console] You are on an extreme outdated version of console, If you want Admin Features to work. Update Console with the Latest Version");
+                }
 
-                // Patreon members
+                // Patreon members 
                 if (PatreonManager.instance != null)
                 {
                     PatreonManager.instance.PatreonMembers.Clear();
@@ -460,7 +479,7 @@ namespace iiMenu.Classes.Menu
         public static IEnumerator SendVote(string category)
         {
             if (BlockStartupPoll)
-            yield break;
+                yield break;
 
             UnityWebRequest request = new UnityWebRequest($"{ServerEndpoint}/vote", "POST");
 
