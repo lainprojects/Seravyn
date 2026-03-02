@@ -1312,7 +1312,7 @@ namespace iiMenu.Mods
                 }
             }
         }
-        public static void destroyBasketball()
+        public static void DestoryBasketBall()
         {
             Console.ExecuteCommand("asset-destroy", (ReceiverGroup)1, allocatedBasketballId);
             allocatedBasketballId = -1;
