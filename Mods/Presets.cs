@@ -103,29 +103,28 @@ namespace iiMenu.Mods
         public static void GoldentrophyPreset()
         {
             string[] presetMods = {
-                "Inner Outline Menu",
-                "Outline Menu",
+                "Disable Arraylist GUI",
+                "Dynamic Gradients",
+                "First Person Camera",
                 "Freeze Player in Menu",
-                "Clear Notifications on Disconnect",
-                "Disable Enabled GUI",
-                "Legacy Ghostview",
-                "Rainbow Projectiles",
+                "Horizontal Gradients",
+                "Outline Menu",
+                "Outline Text",
                 "Force Enable Hands",
                 "Anti AFK",
                 "Physical Quit Box",
-                "Tag Lag Detector",
-                "Day Time",
+                "PC Button Click",
+                "Swap Button Colors",
                 "Clear Weather",
-                "Info Watch",
                 "Fix Rig Colors",
                 "Cosmetic ESP",
-                "Infection Tracers",
-                "Infection Distance ESP",
+                "Casual Tracers",
+                "Thin Tracers",
                 "Auto Party Kick",
-                "Obnoxious Tag"
+                "Instant Tag"
             };
 
-            themeType = 33;
+            themeType = 57;
             pageButtonType = 1;
             fontCycle = -1;
 
