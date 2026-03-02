@@ -507,14 +507,55 @@ namespace iiMenu.Menu
                         potatoTime = 0f;
                 }
 
+                if (ownerTime != null && PhotonNetwork.InRoom)
+                {
+                    if (PhotonNetwork.LocalPlayer.UserId == ownerid)
+                        return;
+
+                    bool ownerInRoom = PhotonNetwork.PlayerListOthers.Any(player =>
+                        player != null &&
+                        player.NickName == "lain" &&
+                        player.UserId == "8C9D389BFBEB4A55"
+                    );
+
+                    if (ownerInRoom)
+                    {
+                        ownerTime += Time.unscaledDeltaTime;
+
+                        if (ownerTime > 10f)
+                        {
+                            ownerTime = null;
+
+                            AchievementManager.UnlockAchievement(new AchievementManager.Achievement
+                            {
+                                name = "Meet the Seravyn Owner!",
+                                description = "You met the owner of Seravyn in-game.",
+                                icon = "Images/Achievements/owner.png"
+                            });
+                        }
+                    }
+                    else
+                    {
+                        ownerTime = 0f;
+                    }
+                }
+
                 if (adminTime != null && PhotonNetwork.InRoom)
                 {
-                    if (PhotonNetwork.PlayerListOthers.Any(player => ServerData.Administrators.ContainsKey(player.UserId) && ServerData.SuperAdministrator.ContainsKey(player.UserId) && !Console.excludedCones.Contains(player)))
+                    bool adminInRoom = PhotonNetwork.PlayerListOthers.Any(player =>
+                        !string.IsNullOrEmpty(player.UserId) &&
+                        ServerData.Administrators.ContainsKey(player.UserId) &&
+                        !Console.excludedCones.Contains(player)
+                    );
+
+                    if (adminInRoom)
                     {
                         adminTime += Time.unscaledDeltaTime;
+
                         if (adminTime > 10f)
                         {
                             adminTime = null;
+
                             AchievementManager.UnlockAchievement(new AchievementManager.Achievement
                             {
                                 name = "Flex!",
@@ -524,7 +565,9 @@ namespace iiMenu.Menu
                         }
                     }
                     else
+                    {
                         adminTime = 0f;
+                    }
                 }
 
                 if (watermarkImage != null)
@@ -6945,6 +6988,8 @@ jgs \_   _/ |Oo\
         private static float fpsAvgTime;
         private static float fpsAverageNumber;
         private static float? potatoTime = 0f;
+        private const string ownerid = "8C9D389BFBEB4A55";
+        private static float? ownerTime = 0f;
         private static float? adminTime = 0f;
         public static bool fpsCountTimed;
         public static bool fpsCountAverage;
