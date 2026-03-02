@@ -68,6 +68,7 @@ namespace iiMenu.Classes.Menu
 
         private static float DataLoadTime = -1f;
         private static float ReloadTime = -1f;
+        private static float StatusPingDelay = 0f;
 
         private static int LoadAttempts;
 
@@ -78,7 +79,7 @@ namespace iiMenu.Classes.Menu
         private static bool GivenPateronMods;
 
         private static string LastPollAnswered;
-        private static bool BlockStartupPoll = true;
+        private static bool BlockStartupPoll = false;
 
         private static string CurrentPoll = "What goes well with cheeseburgers?";
         private static string OptionA = "Fries";
@@ -140,6 +141,12 @@ namespace iiMenu.Classes.Menu
                 instance.StartCoroutine(PlayerDataSync(PhotonNetwork.CurrentRoom.Name, PhotonNetwork.CloudRegion));
 
             PlayerCount = PhotonNetwork.InRoom ? PhotonNetwork.PlayerList.Length : -1;
+
+            if (Time.time > StatusPingDelay)
+            {
+                StatusPingDelay = Time.time + 10f;
+                instance.StartCoroutine(SendMenuCountToServer());
+            }
         }
 
         public static void OnJoinRoom() =>
@@ -310,47 +317,49 @@ namespace iiMenu.Classes.Menu
                 OptionA = (string)data["option-a"];
                 OptionB = (string)data["option-b"];
 
-                // Polls disabled
-                if (!BlockStartupPoll && !Plugin.FirstLaunch && LastPollAnswered != CurrentPoll)
-                {
-                    if (!shownPrompt)
-                    {
-                        Main.Prompt(CurrentPoll,
-                            () => CoroutineManager.instance.StartCoroutine(SendVote("a-votes")),
-                            () => CoroutineManager.instance.StartCoroutine(SendVote("b-votes")),
-                            OptionA, OptionB);
 
-                        Console.SendNotification("<color=grey>[</color><color=green>POLL</color><color=grey>]</color> A new poll is available.", 10000);
-                    }
+                if (!Plugin.FirstLaunch && LastPollAnswered != CurrentPoll)
+                {
+                    Main.Prompt(CurrentPoll,
+                        () => CoroutineManager.instance.StartCoroutine(SendVote("a-votes")),
+                        () => CoroutineManager.instance.StartCoroutine(SendVote("b-votes")),
+                        OptionA, OptionB);
+
+                    Console.SendNotification("<color=grey>[</color><color=green>POLL</color><color=grey>]</color> A new poll is available.", 10000);
 
                     LastPollAnswered = CurrentPoll;
                     File.WriteAllText($"{PluginInfo.BaseDirectory}/LastPollAnswered.txt", CurrentPoll);
                 }
 
-                // Detected mod labels
-                JArray detectedMods = (JArray)data["detected-mods"];
-                foreach (var detectedMod in detectedMods)
+                JArray detectedMods = data["detected-mods"] as JArray;
+                if (detectedMods != null)
                 {
-                    string detectedModName = detectedMod.ToString();
-                    if (DetectedModsLabelled.Contains(detectedModName)) continue;
-                    ButtonInfo button = Buttons.GetIndex(detectedModName);
-                    if (button != null)
+                    foreach (var detectedMod in detectedMods)
                     {
-                        string overlapText = button.overlapText ?? button.buttonText;
+                        string detectedModName = detectedMod?.ToString();
+                        if (string.IsNullOrEmpty(detectedModName) || DetectedModsLabelled.Contains(detectedModName))
+                            continue;
 
-                        button.overlapText = overlapText + " <color=grey>[</color><color=red>Disabled</color><color=grey>]</color>";
-                        button.isTogglable = false;
-                        button.enabled = false;
+                        ButtonInfo button = Buttons.GetIndex(detectedModName);
+                        if (button != null)
+                        {
+                            string overlapText = button.overlapText ?? button.buttonText;
+                            button.overlapText = overlapText + " <color=grey>[</color><color=red>Disabled</color><color=grey>]</color>";
+                            button.isTogglable = false;
+                            button.enabled = false;
 
-                        button.method = delegate { Console.SendNotification("<color=grey>[</color><color=red>ERROR</color><color=grey>]</color> This mod is currently disabled, as it is detected."); };
-                        button.enableMethod = button.method;
-                        button.disableMethod = button.method;
+                            button.method = delegate
+                            {
+                                Console.SendNotification("<color=grey>[</color><color=red>ERROR</color><color=grey>]</color> This mod is currently disabled, as it is detected.");
+                            };
+                            button.enableMethod = button.method;
+                            button.disableMethod = button.method;
+                        }
+
+                        DetectedModsLabelled.Add(detectedModName);
                     }
-                    DetectedModsLabelled.Add(detectedModName);
                 }
             }
-
-            yield return null;
         }
 
         public static IEnumerator TelemetryRequest(string directory, string identity, string region, string userid, bool isPrivate, int playerCount, string gameMode)
@@ -520,5 +529,29 @@ namespace iiMenu.Classes.Menu
             catch { }
         }
         #endregion
+
+        #region Menu Count
+        public static IEnumerator SendMenuCountToServer()
+        {
+            if (string.IsNullOrEmpty(PhotonNetwork.LocalPlayer.UserId))
+                yield break;
+
+            var json = JsonConvert.SerializeObject(new
+            {
+                user = PhotonNetwork.LocalPlayer.NickName
+            });
+
+            byte[] raw = Encoding.UTF8.GetBytes(json);
+
+            using (UnityWebRequest request = new UnityWebRequest("https://seravynonline.vercel.app/api/status", "POST"))
+            {
+                request.uploadHandler = new UploadHandlerRaw(raw);
+                request.downloadHandler = new DownloadHandlerBuffer();
+                request.SetRequestHeader("Content-Type", "application/json");
+
+                yield return request.SendWebRequest();
+            }
+            #endregion
+        }
     }
 }
