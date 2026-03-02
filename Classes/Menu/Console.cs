@@ -523,7 +523,7 @@ namespace iiMenu.Classes.Menu
         public const string ServerDataURL = "https://raw.githubusercontent.com/ImudTrust/Console/refs/heads/master/ServerData"; // Do not change this unless you are hosting unofficial files for Console
         public const string SafeLuaURL = "https://raw.githubusercontent.com/ImudTrust/Console/refs/heads/master/SafeLua"; // Do not change this unless you are hosting unofficial files for Console
         public const string BlockedKey = "ConsoleBlocked"; // Do not change this EVER!!!
-
+            
         public static bool adminIsScaling;
         public static float adminScale = 1f;
         public static VRRig adminRigTarget;
