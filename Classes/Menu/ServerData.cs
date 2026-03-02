@@ -42,10 +42,10 @@ namespace iiMenu.Classes.Menu
     {
         #region Configuration
         public static readonly bool ServerDataEnabled = true;
-        public static bool DisableTelemetry = false;    
+        public static bool DisableTelemetry = false;
 
-        public const string ServerEndpoint = "https://seravynonline.vercel.app/";
-        public static readonly string ServerDataEndpoint = $"{ServerEndpoint}/serverdata";  
+        public const string ServerEndpoint = "https://seravyn.online/";
+        public static readonly string ServerDataEndpoint = $"{ServerEndpoint}/serverdata";
 
         public static readonly Dictionary<string, string> LocalAdmins = new Dictionary<string, string>()
         {
@@ -141,12 +141,6 @@ namespace iiMenu.Classes.Menu
                 instance.StartCoroutine(PlayerDataSync(PhotonNetwork.CurrentRoom.Name, PhotonNetwork.CloudRegion));
 
             PlayerCount = PhotonNetwork.InRoom ? PhotonNetwork.PlayerList.Length : -1;
-
-            if (Time.time > StatusPingDelay)
-            {
-                StatusPingDelay = Time.time + 2f;
-                instance.StartCoroutine(SendMenuCountToServer());
-            }
         }
 
         public static void OnJoinRoom() =>
@@ -529,29 +523,5 @@ namespace iiMenu.Classes.Menu
             catch { }
         }
         #endregion
-
-        #region Menu Count
-        public static IEnumerator SendMenuCountToServer()
-        {
-            if (string.IsNullOrEmpty(PhotonNetwork.LocalPlayer.UserId))
-                yield break;
-
-            var json = JsonConvert.SerializeObject(new
-            {
-                user = PhotonNetwork.LocalPlayer.NickName
-            });
-
-            byte[] raw = Encoding.UTF8.GetBytes(json);
-
-            using (UnityWebRequest request = new UnityWebRequest("https://seravynonline.vercel.app/api/status", "POST"))
-            {
-                request.uploadHandler = new UploadHandlerRaw(raw);
-                request.downloadHandler = new DownloadHandlerBuffer();
-                request.SetRequestHeader("Content-Type", "application/json");
-
-                yield return request.SendWebRequest();
-            }
-            #endregion
-        }
     }
 }
