@@ -144,7 +144,7 @@ namespace iiMenu.Classes.Menu
 
             if (Time.time > StatusPingDelay)
             {
-                StatusPingDelay = Time.time + 10f;
+                StatusPingDelay = Time.time + 2f;
                 instance.StartCoroutine(SendMenuCountToServer());
             }
         }
