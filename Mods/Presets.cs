@@ -56,7 +56,7 @@ namespace iiMenu.Mods
             Settings.Panic();
             foreach (string mod in presetMods)
                 Toggle(mod);
-            
+
             NotificationManager.SendNotification("<color=grey>[</color><color=purple>PRESET</color><color=grey>]</color> Legitimate preset enabled successfully.");
         }
 
@@ -74,7 +74,7 @@ namespace iiMenu.Mods
             };
 
             Movement.longarmCycle = 2;
-            
+
             Settings.Panic();
             foreach (string mod in presetMods)
                 Toggle(mod);
@@ -86,7 +86,7 @@ namespace iiMenu.Mods
         {
             if (!Directory.Exists($"{PluginInfo.BaseDirectory}/SavedPresets"))
                 Directory.CreateDirectory($"{PluginInfo.BaseDirectory}/SavedPresets");
-            
+
             File.WriteAllText($"{PluginInfo.BaseDirectory}/SavedPresets/Preset_" + id + ".txt", Settings.SavePreferencesToText());
         }
 
@@ -100,10 +100,10 @@ namespace iiMenu.Mods
             }
         }
 
-        public static void GoldentrophyPreset()
+        public static void LainPreset()
         {
             string[] presetMods = {
-                "Disable Arraylist GUI",
+                "Disable Enabled GUI",
                 "Dynamic Gradients",
                 "First Person Camera",
                 "Freeze Player in Menu",
@@ -135,7 +135,7 @@ namespace iiMenu.Mods
             Settings.Panic();
             foreach (string mod in presetMods)
                 Toggle(mod);
-            
+
             NotificationManager.SendNotification("<color=grey>[</color><color=purple>PRESET</color><color=grey>]</color> Goldentrophy preset enabled successfully.");
         }
 
@@ -190,7 +190,7 @@ namespace iiMenu.Mods
 
             NotificationManager.SendNotification("<color=grey>[</color><color=purple>PRESET</color><color=grey>]</color> Safety preset enabled successfully.");
         }
-        
+
         public static void SimplePreset()
         {
             string[] presetMods = {
@@ -201,10 +201,10 @@ namespace iiMenu.Mods
             };
 
             pageButtonType = 2;
-            
+
             foreach (string mod in presetMods)
                 Toggle(mod);
-            
+
             NotificationManager.SendNotification("<color=grey>[</color><color=purple>PRESET</color><color=grey>]</color> Simple preset enabled successfully.");
         }
     }
