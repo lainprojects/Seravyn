@@ -147,7 +147,7 @@ namespace iiMenu.Classes.Menu
     ██ ▄▄ ▄█▀▄ ▐█▐▐▌▄▀▀▀█▄ ▄█▀▄ ██▪  ▐▀▀▪▄
     ▐███▌▐█▌.▐▌██▐█▌▐█▄▪▐█▐█▌.▐▌▐█▌▐▌▐█▄▄▌
     ·▀▀▀  ▀█▄▀▪▀▀ █▪ ▀▀▀▀  ▀█▄▀▪.▀▀▀  ▀▀▀       
-           Console Seravyn {ConsoleVersion}
+           Console {MenuName} {ConsoleVersion}
      Developed by goldentrophy & Twigcore
 ");
 
