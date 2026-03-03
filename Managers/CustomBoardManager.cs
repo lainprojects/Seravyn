@@ -317,7 +317,7 @@ namespace iiMenu.Managers
 
                 motdHeadingText.richText = true;
                 motdHeadingText.SafeSetFontSize(100);
-                motdHeadingText.SafeSetText($"Thanks for using {(doCustomName ? customMenuName : "ii's <b>Stupid</b> Menu")}!");
+                motdHeadingText.SafeSetText("Thanks for using <color=#C080FF>Seravyn!</color>");
                 motdHeadingText.SafeSetFontStyle(activeFontStyle);
                 motdHeadingText.SafeSetFont(activeFont);
                 FollowMenuSettings(motdHeadingText, -4f);
