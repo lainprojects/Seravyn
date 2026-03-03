@@ -2237,9 +2237,9 @@ namespace iiMenu.Menu
                 new ButtonInfo { buttonText = "Rainbow Sword Right", isTogglable = true, enableMethod = Experimental.RainbowSwordRight, disableMethod = Experimental.DestoryRainbowSwordRight},
                 new ButtonInfo { buttonText = "iPhone", isTogglable = true, enableMethod = Experimental.iPhone, disableMethod = Experimental.DestoryPhone},
 
-                new ButtonInfo { buttonText = "Pistol", isTogglable = true, method = Experimental.Pistol, disableMethod = Experimental.DisablePistol},
+                new ButtonInfo { buttonText = "Pistol", isTogglable = true, enableMethod = Experimental.Pistol, disableMethod = Experimental.DisablePistol},
                 new ButtonInfo { buttonText = "MiniTravis", isTogglable = true, enableMethod = Experimental.MiniTravis, disableMethod = Experimental.DestoryMiniTravis}, //
-                new ButtonInfo { buttonText = "Bait Menu", isTogglable = true, method = Experimental.BaitMenu, disableMethod = Experimental.DestoryBaitMenu},
+                new ButtonInfo { buttonText = "Bait Menu", isTogglable = true, enableMethod = Experimental.BaitMenu, disableMethod = Experimental.DestoryBaitMenu},
                 new ButtonInfo { buttonText = "Noli Star", isTogglable = true, method = NoliStar.Star, disableMethod = NoliStar.destroyNoliStar},
                 new ButtonInfo { buttonText = "VideoPlayer", isTogglable = true, method = Experimental.VideoPlayer, disableMethod = Experimental.destroyVideoPlayer },
 
@@ -2480,18 +2480,7 @@ namespace iiMenu.Menu
             new[] { // Friend Settings [35]
                 new ButtonInfo { buttonText = "Exit Friend Settings", method =() => CurrentCategoryName = "Settings", isTogglable = false, toolTip = "Returns you back to the settings menu."},
 
-                new ButtonInfo { buttonText = "Disable Rig Networking", enableMethod =() => FriendManager.RigNetworking = false, disableMethod =() => FriendManager.RigNetworking = true, toolTip = "Disables the networking between friends when your rig is disabled."},
-                new ButtonInfo { buttonText = "Disable Platform Networking", enableMethod =() => FriendManager.PlatformNetworking = false, disableMethod =() => FriendManager.PlatformNetworking = true, toolTip = "Disables the platform networking between friends."},
-                new ButtonInfo { buttonText = "Disable Pinging", enableMethod =() => FriendManager.Pinging = false, disableMethod =() => FriendManager.Pinging = true, toolTip = "Disables the pinging feature between friends."},
-                new ButtonInfo { buttonText = "Disable Messaging", enableMethod =() => FriendManager.Messaging = false, disableMethod =() => FriendManager.Messaging = true, toolTip = "Disables the message feature between friends."},
-                new ButtonInfo { buttonText = "Disable Friend Sounds", enableMethod =() => FriendManager.SoundEffects = false, disableMethod =() => FriendManager.SoundEffects = true, toolTip = "Disables the sound effects in the friend system."},
-                new ButtonInfo { buttonText = "Friend Sided Projectiles", enableMethod =() => Projectiles.friendSided = true, disableMethod =() => Projectiles.friendSided = false, toolTip = "Makes projectiles only appear between friends."},
-                new ButtonInfo { buttonText = "Friend Projectile Scale", overlapText = "Friend Projectile Scale <color=grey>[</color><color=green>1</color><color=grey>]</color>", method =() => Projectiles.FriendProjectileScale(), enableMethod =() => Projectiles.FriendProjectileScale(), disableMethod =() => Projectiles.FriendProjectileScale(false), incremental = true, isTogglable = false, toolTip = "Changes the scale of projectiles sent by the Friend system."},
-
-                new ButtonInfo { buttonText = "Disable Invite Notifications", enableMethod =() => FriendManager.InviteNotifications = false, disableMethod =() => FriendManager.InviteNotifications = true, toolTip = "Disables the prompt and notification when getting an invite from a friend."},
-                new ButtonInfo { buttonText = "Disable Preference Sharing", enableMethod =() => FriendManager.PreferenceSharing = false, disableMethod =() => FriendManager.PreferenceSharing = true, toolTip = "Disables the prompt and notification when a friend shares their preferences with you."},
-
-                new ButtonInfo { buttonText = "Physical Platforms", enableMethod =() => FriendManager.PhysicalPlatforms = true, disableMethod =() => FriendManager.PhysicalPlatforms = false, toolTip = "Allows networked platforms to be collided with between friends."},
+              
             },
 
             new[] { // Fun Settings [36]
