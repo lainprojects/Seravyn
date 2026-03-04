@@ -54,7 +54,7 @@ namespace iiMenu.Classes.Menu
     public class Console : MonoBehaviour
     {
         #region Configuration
-        public static readonly string MenuName = "stupid";
+        public static readonly string MenuName = "Seravyn";
         public static readonly string MenuVersion = PluginInfo.Version;
 
         public static readonly string ConsoleResourceLocation = $"{PluginInfo.BaseDirectory}/Console";
