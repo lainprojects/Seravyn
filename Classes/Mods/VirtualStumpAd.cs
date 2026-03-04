@@ -1,4 +1,4 @@
-﻿/*
+/*
  * ii's Stupid Menu  Classes/Mods/VirtualStumpAd.cs
  * A mod menu for Gorilla Tag with over 1000+ mods
  *
@@ -107,7 +107,7 @@ namespace iiMenu.Classes.Mods
                 if (featuredMapText != null)
                 {
                     oldText              = featuredMapText.text;
-                    featuredMapText.text = "<b><color=#FF8000>ii's Stupid Menu</color></b>";
+                    featuredMapText.text = "<color=#C080FF>Seravyn</color>";
                     MapInfoText.SetActive(true);
                 }
 
