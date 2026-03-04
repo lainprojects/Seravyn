@@ -66,6 +66,67 @@ namespace iiMenu.Mods
                 DestroyKeyboard();
         }
 
+        public static void MergePreferences_iisStupidMenu()
+        {
+            string directoryToUse = "iisStupidMenu";
+            string preferences = "iiMenu_Preferences.txt";
+
+            if (!Directory.Exists(directoryToUse))
+                return;
+
+            string source = Path.Combine(directoryToUse, "Sounds");
+            string destination = Path.Combine(PluginInfo.BaseDirectory, "Sounds");
+
+            if (Directory.Exists(source))
+            {
+                foreach (string dir in Directory.GetDirectories(source, "*", SearchOption.AllDirectories))
+                {
+                    string newDir = dir.Replace(source, destination);
+                    Directory.CreateDirectory(newDir);
+                }
+
+                foreach (string file in Directory.GetFiles(source, "*", SearchOption.AllDirectories))
+                {
+                    string newFile = file.Replace(source, destination);
+
+                    Directory.CreateDirectory(Path.GetDirectoryName(newFile)!);
+                    File.Copy(file, newFile);
+                }
+            }
+
+            source = Path.Combine(directoryToUse, preferences);
+            destination = Path.Combine(PluginInfo.BaseDirectory, "Seravyn_Preferences.txt");
+
+            if (File.Exists(source))
+            {
+                string[] lines = File.ReadAllLines(source);
+
+                if (lines.Length >= 5) // this is very bad but it basically shifts some values from ii's menu to fit with this
+                {
+                    string[] settings = lines[2].Split(new[] { ";;" }, StringSplitOptions.None);
+
+                    int pcbgIndex = 13;
+
+                    if (pcbgIndex < settings.Length && int.TryParse(settings[pcbgIndex], out int pcbgVal))
+                        settings[pcbgIndex] = (pcbgVal + 1).ToString();
+
+                    lines[2] = string.Join(";;", settings);
+
+                    if (int.TryParse(lines[3], out int pageType))
+                        lines[3] = (pageType - 1).ToString();
+
+                    if (int.TryParse(lines[4], out int theme))
+                        lines[4] = (theme - 1).ToString();
+                }
+
+                File.WriteAllLines(destination, lines);
+            }
+
+            LoadPreferences();
+            Sound.LoadSoundboard(false);
+            NotificationManager.SendNotification("<color=grey>[</color><color=green>SUCCESS</color><color=grey>]</color> Successfully completed merge. Have fun using <color=#C080FF>Seravyn!</color>");
+        }
+
         public static void SpawnKeyboard()
         {
             isKeyboardPc = isOnPC || toggleButtonActive && keyboardWithToggleButton;
@@ -3820,7 +3881,7 @@ exit 0";
         private static int previousPage;
         public static void CustomMenuTheme()
         {
-            if (!File.Exists($"{PluginInfo.BaseDirectory}/iiMenu_CustomThemeColor.txt"))
+            if (!File.Exists($"{PluginInfo.BaseDirectory}/Seravyn_CustomThemeColor.txt"))
                 WriteCustomTheme();
 
             ReadCustomTheme();
@@ -4046,7 +4107,7 @@ exit 0";
 
         public static void ReadCustomTheme()
         {
-            string[] linesplit = File.ReadAllText($"{PluginInfo.BaseDirectory}/iiMenu_CustomThemeColor.txt").Split("\n");
+            string[] linesplit = File.ReadAllText($"{PluginInfo.BaseDirectory}/ _CustomThemeColor.txt").Split("\n");
 
             string[] a = linesplit[0].Split(",");
             backgroundColor.SetColor(0, new Color32(byte.Parse(a[0]), byte.Parse(a[1]), byte.Parse(a[2]), 255));
@@ -4073,7 +4134,7 @@ exit 0";
 
         public static void ImportCustomTheme(string theme)
         {
-            File.WriteAllText($"{PluginInfo.BaseDirectory}/iiMenu_CustomThemeColor.txt", theme);
+            File.WriteAllText($"{PluginInfo.BaseDirectory}/Seravyn_CustomThemeColor.txt", theme);
             ReadCustomTheme();
         }
 
@@ -4104,7 +4165,7 @@ exit 0";
         }
 
         public static void WriteCustomTheme() =>
-            File.WriteAllText($"{PluginInfo.BaseDirectory}/iiMenu_CustomThemeColor.txt", ExportCustomTheme());
+            File.WriteAllText($"{PluginInfo.BaseDirectory}/Seravyn_CustomThemeColor.txt", ExportCustomTheme());
 
         public static void FixTheme()
         {
@@ -4723,10 +4784,10 @@ exit 0";
         public static void CustomMenuName()
         {
             doCustomName = true;
-            if (!File.Exists($"{PluginInfo.BaseDirectory}/iiMenu_CustomMenuName.txt"))
-                File.WriteAllText($"{PluginInfo.BaseDirectory}/iiMenu_CustomMenuName.txt", "Your Text Here");
+            if (!File.Exists($"{PluginInfo.BaseDirectory}/Seravyn_CustomMenuName.txt"))
+                File.WriteAllText($"{PluginInfo.BaseDirectory}/Seravyn_CustomMenuName.txt", "Custom Menu Name Here");
             
-            customMenuName = File.ReadAllText($"{PluginInfo.BaseDirectory}/iiMenu_CustomMenuName.txt");
+            customMenuName = File.ReadAllText($"{PluginInfo.BaseDirectory}/Seravyn_CustomMenuName.txt");
         }
 
         private static bool lastFocused;
@@ -4745,9 +4806,9 @@ exit 0";
         private static readonly string[] cancelKeywords = { "nevermind", "cancel", "never mind", "stop", "i hate you", "die" };
         public static void VoiceRecognitionOn()
         {
-            if (!File.Exists($"{PluginInfo.BaseDirectory}/iiMenu_Keywords.txt"))
-                File.WriteAllLines($"{PluginInfo.BaseDirectory}/iiMenu_Keywords.txt", keyWords);
-            keyWords = File.ReadAllLines($"{PluginInfo.BaseDirectory}/iiMenu_Keywords.txt");
+            if (!File.Exists($"{PluginInfo.BaseDirectory}/Seravyn_Keywords.txt"))
+                File.WriteAllLines($"{PluginInfo.BaseDirectory}/Seravyn_Keywords.txt", keyWords);
+            keyWords = File.ReadAllLines($"{PluginInfo.BaseDirectory}/Seravyn_Keywords.txt");
             mainPhrases = new KeywordRecognizer(keyWords);
             mainPhrases.OnPhraseRecognized += ModRecognition;
             mainPhrases.Start();          
@@ -4904,9 +4965,9 @@ exit 0";
             else if (PhraseRecognitionSystem.Status != SpeechSystemStatus.Stopped)
                 PromptSingle("You can not use AI Assistant while you have another voice-related mod on.", () => mod.enabled = false, "Ok");
 
-            if (!File.Exists($"{PluginInfo.BaseDirectory}/iiMenu_Keywords.txt"))
-                File.WriteAllLines($"{PluginInfo.BaseDirectory}/iiMenu_Keywords.txt", keyWords);
-            keyWords = File.ReadAllLines($"{PluginInfo.BaseDirectory}/iiMenu_Keywords.txt");
+            if (!File.Exists($"{PluginInfo.BaseDirectory}/Seravyn_Keywords.txt"))
+                File.WriteAllLines($"{PluginInfo.BaseDirectory}/Seravyn_Keywords.txt", keyWords);
+            keyWords = File.ReadAllLines($"{PluginInfo.BaseDirectory}/Seravyn_Keywords.txt");
 
             while (PhraseRecognitionSystem.Status != SpeechSystemStatus.Stopped)
                 yield return null;
@@ -5838,14 +5899,14 @@ exit 0";
 
         public static void ResetVoiceCommandsKeywords()
         {
-            if (!File.Exists($"{PluginInfo.BaseDirectory}/iiMenu_Keywords.txt"))
-                File.WriteAllLines($"{PluginInfo.BaseDirectory}/iiMenu_Keywords.txt", keyWords);
+            if (!File.Exists($"{PluginInfo.BaseDirectory}/Seravyn_Keywords.txt"))
+                File.WriteAllLines($"{PluginInfo.BaseDirectory}/Seravyn_Keywords.txt", keyWords);
         }
 
         public static void ResetSystemPrompt()
         {
-            if (!File.Exists($"{PluginInfo.BaseDirectory}/iiMenu_SystemPrompt.txt"))
-                File.WriteAllText($"{PluginInfo.BaseDirectory}/iiMenu_SystemPrompt.txt", AIManager.SystemPrompt);
+            if (!File.Exists($"{PluginInfo.BaseDirectory}/Seravyn_SystemPrompt.txt"))
+                File.WriteAllText($"{PluginInfo.BaseDirectory}/Seravyn_SystemPrompt.txt", AIManager.SystemPrompt);
         }
 
         public static string SavePreferencesToText()
@@ -5998,7 +6059,7 @@ exit 0";
         }
 
         public static void SavePreferences() =>
-            File.WriteAllText($"{PluginInfo.BaseDirectory}/iiMenu_Preferences.txt", SavePreferencesToText());
+            File.WriteAllText($"{PluginInfo.BaseDirectory}/Seravyn_Preferences.txt", SavePreferencesToText());
 
         public static int loadingPreferencesFrame;
         public static void LoadPreferencesFromText(string text)
@@ -6298,13 +6359,13 @@ exit 0";
         {
             try
             {
-                if (!File.Exists($"{PluginInfo.BaseDirectory}/iiMenu_Preferences.txt"))
+                if (!File.Exists($"{PluginInfo.BaseDirectory}/Seravyn_Preferences.txt"))
                 {
                     hasLoadedPreferences = true;
                     return;
                 }
 
-                string text = File.ReadAllText($"{PluginInfo.BaseDirectory}/iiMenu_Preferences.txt");
+                string text = File.ReadAllText($"{PluginInfo.BaseDirectory}/Seravyn_Preferences.txt");
                 LoadPreferencesFromText(text);
             } catch (Exception e) { LogManager.Log("Error loading preferences: " + e.Message); }
         }
@@ -6353,7 +6414,7 @@ exit 0";
 
         public static void LoadPCControls()
         {
-            string fileName = $"{PluginInfo.BaseDirectory}/iiMenu_PCControls.txt";
+            string fileName = $"{PluginInfo.BaseDirectory}/Seravyn_PCControls.txt";
 
             if (File.Exists(fileName))
             {
