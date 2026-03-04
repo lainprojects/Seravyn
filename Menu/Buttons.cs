@@ -130,10 +130,8 @@ namespace iiMenu.Menu
                 new ButtonInfo { buttonText = "Strikethrough Text", enableMethod =() => strikethroughText = true, disableMethod =() => strikethroughText = false, toolTip = "Strikes out all text on the menu."},
                 new ButtonInfo { buttonText = "Underline Text", enableMethod =() => underlineText = true, disableMethod =() => underlineText = false, toolTip = "Underlines all text on the menu."},
                 new ButtonInfo { buttonText = "Small-Caps Text", enableMethod =() => smallCapsText = true, disableMethod =() => smallCapsText = false, toolTip = "Turns all text into a small capital version."},
-                new ButtonInfo { buttonText = "Redact Text", enableMethod =() => redactText = true, disableMethod =() => redactText = false, toolTip = "Redacts all text on the menu."},
-                new ButtonInfo { buttonText = "Inner Outline Menu", enableMethod =() => innerOutline = true, disableMethod =() => innerOutline = false, toolTip = "Gives the menu an outline on the inside."},
+                new ButtonInfo { buttonText = "JE Files Text", enableMethod =() => redactText = true, disableMethod =() => redactText = false, toolTip = "Redacts all text on the menu."},
                 new ButtonInfo { buttonText = "Smooth Menu Position", enableMethod =() => smoothMenuPosition = true, disableMethod =() => smoothMenuPosition = false, toolTip = "Smoothes the menu's position."},
-                new ButtonInfo { buttonText = "Smooth Menu Rotation", enableMethod =() => smoothMenuRotation = true, disableMethod =() => smoothMenuRotation = false, toolTip = "Smoothes the menu's rotation."},
 
                 new ButtonInfo { buttonText = "Freeze Player in Menu", method = Settings.FreezePlayerInMenu, enableMethod =() => closePosition = GorillaTagger.Instance.rigidbody.transform.position, toolTip = "Freezes your character when inside the menu."},
                 new ButtonInfo { buttonText = "Freeze Rig in Menu", overlapText = "Ghost Rig in Menu", method = Settings.FreezeRigInMenu, disableMethod = Movement.EnableRig, toolTip = "Freezes your rig when inside the menu."},
@@ -141,7 +139,7 @@ namespace iiMenu.Menu
                 new ButtonInfo { buttonText = "Menu Collisions", enableMethod =() => menuCollisions = true, disableMethod =() => menuCollisions = false, toolTip = "Gives the menu collisions when dropping it."},
                 new ButtonInfo { buttonText = "Player Scale Menu", enableMethod =() => scaleWithPlayer = true, disableMethod =() => scaleWithPlayer = false, toolTip = "Scales the menu with your player scale."},
                 new ButtonInfo { buttonText = "Alphabetize Menu", toolTip = "Alphabetizes the entire menu."},
-                new ButtonInfo { buttonText = "Custom Menu Name", enableMethod = Settings.CustomMenuName, disableMethod =() => doCustomName = false, toolTip = $"Changes the name of the menu to whatever. You can change the text inside of your Gorilla Tag files ({PluginInfo.BaseDirectory}/iiMenu_CustomMenuName.txt)."},
+                new ButtonInfo { buttonText = "Custom Menu Name", enableMethod = Settings.CustomMenuName, disableMethod =() => doCustomName = false, toolTip = $"Changes the name of the menu to whatever. You can change the text inside of your Gorilla Tag files ({PluginInfo.BaseDirectory}/Seravyn_CustomMenuName.txt)."},
                 new ButtonInfo { buttonText = "Menu Trail", enableMethod =() => menuTrail = true, disableMethod =() => menuTrail = false, toolTip = "Gives the menu a trail when you drop."},
 
                 new ButtonInfo { buttonText = "Dynamic Animations", enableMethod =() => dynamicAnimations = true, disableMethod =() => dynamicAnimations = false, toolTip = "Adds more animations to the menu, giving you a better sense of control."},
@@ -2237,7 +2235,7 @@ namespace iiMenu.Menu
                 new ButtonInfo { buttonText = "Rainbow Sword Right", isTogglable = true, enableMethod = Experimental.RainbowSwordRight, disableMethod = Experimental.DestoryRainbowSwordRight},
                 new ButtonInfo { buttonText = "iPhone", isTogglable = true, enableMethod = Experimental.iPhone, disableMethod = Experimental.DestoryPhone},
 
-                new ButtonInfo { buttonText = "Pistol", isTogglable = true, enableMethod = Experimental.Pistol, disableMethod = Experimental.DisablePistol},
+                new ButtonInfo { buttonText = "Pistol", isTogglable = true, method = Experimental.Pistol, disableMethod = Experimental.DisablePistol},
                 new ButtonInfo { buttonText = "MiniTravis", isTogglable = true, enableMethod = Experimental.MiniTravis, disableMethod = Experimental.DestoryMiniTravis}, //
                 new ButtonInfo { buttonText = "Bait Menu", isTogglable = true, enableMethod = Experimental.BaitMenu, disableMethod = Experimental.DestoryBaitMenu},
                 new ButtonInfo { buttonText = "Noli Star", isTogglable = true, method = NoliStar.Star, disableMethod = NoliStar.destroyNoliStar},
@@ -2367,7 +2365,7 @@ namespace iiMenu.Menu
                 new ButtonInfo { buttonText = "Search", method = Settings.Search, isTogglable = false, toolTip = "Lets you search for specific mods."},
                 new ButtonInfo { buttonText = "Global Return", method = Settings.GlobalReturn, isTogglable = false, toolTip = "Returns you to the previous category."},
                 new ButtonInfo { buttonText = "Info Screen", method = Settings.Debug, enableMethod = Settings.ShowDebug, disableMethod = Settings.HideDebug, toolTip = "Shows game and modding related information."},
-                new ButtonInfo { buttonText = "Donate Button", method =() => { NotificationManager.ClearAllNotifications(); acceptedDonations = true; File.WriteAllText($"{PluginInfo.BaseDirectory}/iiMenu_HideDonationButton.txt", "true"); Prompt("I've spent nearly two years building this menu. Your Patreon support helps me keep it growing, want to check it out?", () => Process.Start("https://patreon.com/iiDk")); }, isTogglable = false, toolTip = "An advertisement for my Patreon." },
+                new ButtonInfo { buttonText = "Donate Button", method =() => { NotificationManager.ClearAllNotifications(); acceptedDonations = true; File.WriteAllText($"{PluginInfo.BaseDirectory}/Seravyn_HideDonationButton.txt", "true"); Prompt("I've spent nearly two years building this menu. Your Patreon support helps me keep it growing, want to check it out?", () => Process.Start("https://patreon.com/iiDk")); }, isTogglable = false, toolTip = "An advertisement for my Patreon." },
                 new ButtonInfo { buttonText = "Update Button", method =() => UpdatePrompt(), isTogglable = false, toolTip = "Prompts you to update the menu." },
 
                 new ButtonInfo { buttonText = "Accept Prompt", method =() => { NotificationManager.ClearAllNotifications(); if (inTextInput) Settings.DestroyKeyboard(); CurrentPrompt.AcceptAction?.Invoke(); Settings.StopCurrentPrompt(); }, isTogglable = false},
