@@ -212,7 +212,7 @@ namespace iiMenu.Mods
                 .Aggregate("", (current, line) => current + (Environment.NewLine + "echo      " + line));
 
             string restartScript = @"@echo off
-title ii's Stupid Menu
+title Seravyn
 color 0E
 
 cls
@@ -255,7 +255,7 @@ exit";
         {
             if (discord == null)
             {
-                discord = new DiscordRpcClient("1436519874368114850")
+                discord = new DiscordRpcClient("1477958829315719218") // Uses Application ID/Client ID
                 {
                     Logger = new Managers.DiscordRPC.Logging.DiscordLogManager()
                 };
@@ -291,7 +291,7 @@ exit";
                     Assets = new Managers.DiscordRPC.Assets
                     {
                         LargeImageKey = "cone",
-                        LargeImageText = "ii's Stupid Menu",
+                        LargeImageText = "Seravyn",
                         SmallImageKey = inRoom ? "online" : "offline",
                         SmallImageText = inRoom ? "Online" : "Offline"
                     },
