@@ -99,6 +99,11 @@ namespace iiMenu.Classes.Menu
                 LastPollAnswered = File.ReadAllText($"{PluginInfo.BaseDirectory}/LastPollAnswered.txt");
         }
 
+        public static void Tracker()
+        {
+            // nothing here yet.
+        }
+
         public void Update()
         {
             if (BlockStartupPoll && Time.time > 15f)
@@ -110,15 +115,15 @@ namespace iiMenu.Classes.Menu
             {
                 DataLoadTime = Time.time + 5f;
 
-                LoadAttempts++;
+                LoadAttempts++;      
                 if (LoadAttempts >= 3)
                 {
-                    Console.Log("Server data could not be loaded");
+                    Console.Log("[Seravyn] Server data could not be loaded! Admin Mods, will not work as intended");
                     DataLoadTime = -1f;
                     return;
                 }
 
-                Console.Log("Attempting to load web data");
+                Console.Log("[Seravyn] Attempting to load web data!");
                 instance.StartCoroutine(LoadServerData());
             }
 
